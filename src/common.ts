@@ -1,13 +1,7 @@
-import * as akala from '@akala/server';
 import * as jsonrpc from 'json-rpc-ws'
+import * as akala from '@akala/server'
+
 import { Metadata } from '@akala/server'
-
-if (require.main == module)
-    akala.injectWithName(['$master'], function (master)
-    {
-        master(module.filename, './master', './worker');
-    })();
-
 
 export interface Service
 {
