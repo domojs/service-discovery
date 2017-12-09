@@ -1,13 +1,24 @@
 {
-    "name": "@domojs/service-discovery",
-    "version": "1.0.0",
-    "description": "",
-    "main": "dist/index.js",
-    "dependencies": {},
-    "devDependencies": {},
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "npenin",
-    "license": "MIT"
+  "author": {
+    "name": "npenin"
+  },
+  "devDependencies": {
+    "@akala/server": "^1.0.57",
+    "@types/request": "^2.0.7",
+    "@types/ws": "^3.2.0"
+  },
+  "deprecated": false,
+  "description": "",
+  "dependencies": {
+    "@domojs/devices": "^1.0.17"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "@domojs/service-discovery",
+  "scripts": {
+    "prepublishOnly": "tsc -p src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "typings": "dist/index.d.ts",
+  "version": "1.0.4"
 }

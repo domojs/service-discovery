@@ -1,22 +1,11 @@
 import * as akala from '@akala/server';
-import * as jsonrpc from 'json-rpc-ws'
-import { Metadata } from '@akala/server'
+import * as jsonrpc from '@akala/json-rpc-ws'
+import { Connection } from '@akala/json-rpc-ws'
+import { Metadata, Proxy } from '@akala/server'
+export { meta, Service } from './common';
 
-if (require.main == module)
-    akala.injectWithName(['$master'], function (master)
-    {
-        master(module.filename, './master', './worker');
-    })();
-
-
-export interface Service
+akala.injectWithName(['$master', '$isModule'], function (master: akala.worker.MasterRegistration, isModule: (m: string) => boolean)
 {
-    type: string;
-    name: string;
-    connection?: jsonrpc.Connection;
-}
-
-export var meta = new Metadata()
-    .clientToServerOneWay<Service>()({ add: true, delete: true, notify: true })
-    .clientToServer<Partial<Service>, { [name: string]: Service }>()({ get: true })
-    .serverToClientOneWay<Service>()({ add: true, delete: true });
+    if (isModule('@domojs/service-discovery'))
+        master(module.filename, './master', './common');
+})();

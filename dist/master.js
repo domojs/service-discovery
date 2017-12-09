@@ -4,17 +4,17 @@ const akala = require("@akala/server");
 const common_1 = require("./common");
 var services = { byTypes: {}, byNames: {} };
 var rooms = { byTypes: [], byNames: [] };
-common_1.meta.createServer(akala.resolve('$router'), '/zeroconf', {
+akala.createServerFromMeta(common_1.meta)(akala.resolve('$router'), '/zeroconf', {
     add: function (service) {
-        akala.extend(service, { connection: this });
-        services.byTypes[service.type] = services[service.type] || {};
+        // akala.extend(service, { connection: this });
+        services.byTypes[service.type] = services.byTypes[service.type] || {};
         services.byTypes[service.type][service.name] = service;
         services.byNames[service.name] = service;
         rooms.byTypes.forEach(function (socket) {
-            socket.sendMethod('Service-Add', { type: service.type, name: service.name });
+            socket.sendMethod('add', service);
         });
         rooms.byNames.forEach(function (socket) {
-            socket.sendMethod('Service-Add', { type: service.type, name: service.name });
+            socket.sendMethod('add', service);
         });
     },
     delete: function (service) {
@@ -22,10 +22,10 @@ common_1.meta.createServer(akala.resolve('$router'), '/zeroconf', {
             delete services.byTypes[service.type][service.name];
         delete services.byNames[service.name];
         rooms.byTypes.forEach(function (socket) {
-            socket.sendMethod('Service-Delete', { type: service.type, name: service.name });
+            socket.sendMethod('delete', service);
         });
         rooms.byNames.forEach(function (socket) {
-            socket.sendMethod('Service-Delete', { type: service.type, name: service.name });
+            socket.sendMethod('delete', service);
         });
     },
     get: function (serviceQuery) {
@@ -41,11 +41,11 @@ common_1.meta.createServer(akala.resolve('$router'), '/zeroconf', {
         else
             return queryable;
     },
-    notify: function (service) {
+    notify: function (service, socket) {
         if (service.type)
-            rooms.byTypes.push(this);
+            rooms.byTypes.push(socket);
         if (service.name)
-            rooms.byNames.push(this);
+            rooms.byNames.push(socket);
     }
 });
 //# sourceMappingURL=master.js.map
