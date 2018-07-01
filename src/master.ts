@@ -4,8 +4,10 @@ import { meta, Service } from './common';
 
 var services: { byTypes: { [type: string]: { [name: string]: Service } }, byNames: { [name: string]: Service } } = { byTypes: {}, byNames: {} };
 var rooms: { byTypes: jsonrpc.Connection[], byNames: jsonrpc.Connection[] } = { byTypes: [], byNames: [] };
-akala.createServerFromMeta(meta)(akala.resolve('$router'), '/zeroconf', {
-    add: function (service: Service)
+@akala.server(meta, { jsonrpcws: '/zeroconf' })
+class Api
+{
+    add(service: Service)
     {
         // akala.extend(service, { connection: this });
         services.byTypes[service.type] = services.byTypes[service.type] || {};
@@ -20,8 +22,8 @@ akala.createServerFromMeta(meta)(akala.resolve('$router'), '/zeroconf', {
         {
             socket.sendMethod('add', service as any);
         });
-    },
-    delete: function (service: Service)
+    }
+    delete(service: Service)
     {
         if (services.byTypes[service.type])
             delete services.byTypes[service.type][service.name];
@@ -35,8 +37,8 @@ akala.createServerFromMeta(meta)(akala.resolve('$router'), '/zeroconf', {
         {
             socket.sendMethod('delete', service as any);
         });
-    },
-    get: function (serviceQuery: Partial<Service>)
+    }
+    get(serviceQuery: Partial<Service>)
     {
         var queryable: { [name: string]: any };
         if (serviceQuery.type)
@@ -51,8 +53,8 @@ akala.createServerFromMeta(meta)(akala.resolve('$router'), '/zeroconf', {
             });
         else
             return queryable;
-    },
-    notify: function (service, socket)
+    }
+    notify(service, socket)
     {
         if (service.type)
             rooms.byTypes.push(socket);
@@ -60,4 +62,4 @@ akala.createServerFromMeta(meta)(akala.resolve('$router'), '/zeroconf', {
         if (service.name)
             rooms.byNames.push(socket);
     }
-});
+}
