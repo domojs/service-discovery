@@ -3,8 +3,8 @@
 
 
 "@akala/core@^2.0.33":
-  version "2.0.38"
-  resolved "https://registry.yarnpkg.com/@akala/core/-/core-2.0.38.tgz#b56cb80d013cc26dc3f3329f359c88b2d549e756"
+  version "2.0.41"
+  resolved "https://registry.yarnpkg.com/@akala/core/-/core-2.0.41.tgz#69df722bcb7002afb52fe8618c3b503cb732e133"
   dependencies:
     "@akala/json-rpc-ws" "^4.1.25"
     "@types/mock-require" "^2.0.0"
@@ -31,8 +31,8 @@
     ws "^5.2.2"
 
 "@akala/server@^2.0.28":
-  version "2.0.36"
-  resolved "https://registry.yarnpkg.com/@akala/server/-/server-2.0.36.tgz#89d600d1cfafb8f5e7337002f57e47c806960e40"
+  version "2.0.41"
+  resolved "https://registry.yarnpkg.com/@akala/server/-/server-2.0.41.tgz#b1615f281df0efd997cd6bfb67a16dedf570f224"
   dependencies:
     "@akala/core" "^2.0.33"
     "@akala/json-rpc-ws" "^4.1.23"
@@ -64,8 +64,8 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "10.5.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
+  version "10.5.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.6.tgz#1640f021dd0eaf12e731e54198c12ad2e020dc8e"
 
 "@types/ws@^5.1.2":
   version "5.1.2"
