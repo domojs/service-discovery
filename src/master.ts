@@ -17,14 +17,16 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
             services.byTypes[service.type][service.name] = service;
             services.byNames[service.name] = service;
 
-            rooms.byTypes[service.type].forEach(function (socket)
-            {
-                socket.sendMethod('add', service as any);
-            });
-            rooms.byNames[service.name].forEach(function (socket)
-            {
-                socket.sendMethod('add', service as any);
-            });
+            if (rooms.byTypes[service.type])
+                rooms.byTypes[service.type].forEach(function (socket)
+                {
+                    socket.sendMethod('add', service as any);
+                });
+            if (rooms.byNames[service.name])
+                rooms.byNames[service.name].forEach(function (socket)
+                {
+                    socket.sendMethod('add', service as any);
+                });
         },
         delete(service: Service)
         {
@@ -32,14 +34,16 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
                 delete services.byTypes[service.type][service.name];
             delete services.byNames[service.name];
 
-            rooms.byTypes[service.type].forEach(function (socket)
-            {
-                socket.sendMethod('delete', service as any);
-            });
-            rooms.byNames[service.name].forEach(function (socket)
-            {
-                socket.sendMethod('delete', service as any);
-            });
+            if (rooms.byTypes[service.type])
+                rooms.byTypes[service.type].forEach(function (socket)
+                {
+                    socket.sendMethod('delete', service as any);
+                });
+            if (rooms.byNames[service.name])
+                rooms.byNames[service.name].forEach(function (socket)
+                {
+                    socket.sendMethod('delete', service as any);
+                });
         },
         get(serviceQuery: Partial<Service>)
         {
