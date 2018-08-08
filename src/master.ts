@@ -5,7 +5,7 @@ import { meta, Service } from './common';
 const logger = akala.logger('domojs:service-discovery');
 
 var services: { byTypes: { [type: string]: { [name: string]: Service } }, byNames: { [name: string]: Service } } = { byTypes: {}, byNames: {} };
-var rooms: { byTypes: jsonrpc.Connection[], byNames: jsonrpc.Connection[] } = { byTypes: [], byNames: [] };
+var rooms: { byTypes: { [type: string]: jsonrpc.Connection[] }, byNames: { [type: string]: jsonrpc.Connection[] } } = { byTypes: {}, byNames: {} };
 
 export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
     {
@@ -17,11 +17,11 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
             services.byTypes[service.type][service.name] = service;
             services.byNames[service.name] = service;
 
-            rooms.byTypes.forEach(function (socket)
+            rooms.byTypes[service.type].forEach(function (socket)
             {
                 socket.sendMethod('add', service as any);
             });
-            rooms.byNames.forEach(function (socket)
+            rooms.byNames[service.name].forEach(function (socket)
             {
                 socket.sendMethod('add', service as any);
             });
@@ -32,11 +32,11 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
                 delete services.byTypes[service.type][service.name];
             delete services.byNames[service.name];
 
-            rooms.byTypes.forEach(function (socket)
+            rooms.byTypes[service.type].forEach(function (socket)
             {
                 socket.sendMethod('delete', service as any);
             });
-            rooms.byNames.forEach(function (socket)
+            rooms.byNames[service.name].forEach(function (socket)
             {
                 socket.sendMethod('delete', service as any);
             });
@@ -60,9 +60,17 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
         notify(service, socket)
         {
             if (service.type)
-                rooms.byTypes.push(socket);
+            {
+                if (!rooms.byTypes[service.type])
+                    rooms.byTypes[service.type] = [];
+                rooms.byTypes[service.type].push(socket);
+            }
 
             if (service.name)
-                rooms.byNames.push(socket);
+            {
+                if (!rooms.byNames[service.name])
+                    rooms.byNames[service.name] = [];
+                rooms.byNames[service.name].push(socket);
+            }
         }
     });
