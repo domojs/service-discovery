@@ -8,7 +8,7 @@ export interface Service
 }
 
 export var meta = new akala.Api()
-    .clientToServerOneWay<Service>()({ add: { rest: { method: 'put', url: '/api/@domojs/service-discovery', params: 'body' } }, delete: { rest: { method: 'delete', url: '/api/@domojs/service-discovery', params: 'body' } } })
+    .clientToServerOneWay<Service>()({ add: { rest: { method: 'put', url: '/', params: 'body' } }, delete: { rest: { method: 'delete', url: '/', params: 'body' } } })
     .clientToServerOneWay<Partial<Service>>()({ notify: true })
-    .clientToServer<Partial<Service>, { [name: string]: Service }>()({ get: { rest: { method: 'get', url: '/api/@domojs/service-discovery', params: 'query' } } })
+    .clientToServer<Partial<Service>, { [name: string]: Service }>()({ get: { rest: { method: 'get', url: '/', params: 'query' } } })
     .serverToClientOneWay<Service>()({ add: true, delete: true });

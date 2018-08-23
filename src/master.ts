@@ -7,7 +7,7 @@ const logger = akala.logger('domojs:service-discovery');
 var services: { byTypes: { [type: string]: { [name: string]: Service } }, byNames: { [name: string]: Service } } = { byTypes: {}, byNames: {} };
 var rooms: { byTypes: { [type: string]: jsonrpc.Connection[] }, byNames: { [type: string]: jsonrpc.Connection[] } } = { byTypes: {}, byNames: {} };
 
-export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
+export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf', rest: '/zeroconf' },
     {
         add(service: Service)
         {
@@ -61,13 +61,17 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
             else
                 return queryable;
         },
-        notify(service, socket)
+        notify(service: Partial<Service>, socket: jsonrpc.Connection)
         {
             if (service.type)
             {
                 if (!rooms.byTypes[service.type])
                     rooms.byTypes[service.type] = [];
                 rooms.byTypes[service.type].push(socket);
+                akala.each(services.byTypes[service.type], (service) =>
+                {
+                    akala.api.jsonrpcws(meta).createClientProxy(socket).add(service);
+                });
             }
 
             if (service.name)
@@ -75,6 +79,8 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf' },
                 if (!rooms.byNames[service.name])
                     rooms.byNames[service.name] = [];
                 rooms.byNames[service.name].push(socket);
+                if (services.byNames[service.name])
+                    akala.api.jsonrpcws(meta).createClientProxy(socket).add(services.byNames[service.name]);
             }
         }
     });
