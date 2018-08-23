@@ -68,10 +68,11 @@ export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf', rest: '/zeroc
                 if (!rooms.byTypes[service.type])
                     rooms.byTypes[service.type] = [];
                 rooms.byTypes[service.type].push(socket);
-                akala.each(services.byTypes[service.type], (service) =>
-                {
-                    akala.api.jsonrpcws(meta).createClientProxy(socket).add(service);
-                });
+                if (services.byTypes[service.type])
+                    akala.each(services.byTypes[service.type], (service) =>
+                    {
+                        akala.api.jsonrpcws(meta).createClientProxy(socket).add(service);
+                    });
             }
 
             if (service.name)
