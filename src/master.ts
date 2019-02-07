@@ -7,7 +7,7 @@ const logger = akala.logger('domojs:service-discovery');
 var services: { byTypes: { [type: string]: { [name: string]: Service } }, byNames: { [name: string]: Service } } = { byTypes: {}, byNames: {} };
 var rooms: { byTypes: { [type: string]: jsonrpc.Connection[] }, byNames: { [type: string]: jsonrpc.Connection[] } } = { byTypes: {}, byNames: {} };
 
-export var api = akala.buildServer(meta, { jsonrpcws: '/zeroconf', rest: '/zeroconf' },
+export var api = akala.buildServer(meta, { jsonrpcws: '/api/zeroconf', rest: '/api/zeroconf' },
     {
         add(service: Service)
         {
