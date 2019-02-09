@@ -4,7 +4,7 @@
   },
   "devDependencies": {
     "@akala/server": "^2.0.28",
-    "@types/debug": "^0.0.31",
+    "@types/debug": "^4.1.0",
     "@types/ws": "^6.0.1"
   },
   "deprecated": false,
